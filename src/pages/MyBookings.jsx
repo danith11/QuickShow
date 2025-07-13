@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { dummyBookingData } from "../assets/assets";
 import Loading from "../components/Loading";
 import BlurCircle from "../components/BlurCircle";
+import timeFormat from "../lib/timeFormat";
+import dateFormat from "../lib/dateFormat";
 
 const MyBookings = () => {
   const currency = import.meta.env.VITE_CURRENCY;
@@ -38,7 +40,12 @@ const MyBookings = () => {
             />
             <div className="flex flex-col p-4">
               <p className="text-lg font-semibold">{item.show.movie.title}</p>
-              <p className="text-sm text-gray-400">{item.show.movie.runtime}</p>
+              <p className="text-sm text-gray-400">
+                {timeFormat(item.show.movie.runtime)}
+              </p>
+              <p className="text-sm text-gray-400 mt-auto">
+                {dateFormat(item.show.showDateTime)}
+              </p>
             </div>
           </div>
         </div>
