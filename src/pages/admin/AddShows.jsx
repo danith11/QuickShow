@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { dummyShowsData } from "../../assets/assets";
 import Loading from "../../components/Loading";
 import Title from "../../components/admin/Title";
-import { StarIcon } from "lucide-react";
+import { CheckIcon, StarIcon } from "lucide-react";
+import { kConverter } from "../../lib/kConverter";
 
 const AddShows = () => {
   const currency = import.meta.env.VITE_CURRENCY;
@@ -30,6 +31,7 @@ const AddShows = () => {
             <div
               key={movie.id}
               className={`relative max-w-40 cursor-pointer group-hover:not-hover:opacity-40 hover:-translate-y-1 transition duration-300 `}
+              onClick={() => setSelectedMovie(movie.id)}
             >
               <div className="relative rounded-lg overflow-hidden">
                 <img
@@ -42,11 +44,35 @@ const AddShows = () => {
                     <StarIcon className="w-4 h-4 text-primary fill-primary" />
                     {movie.vote_average.toFixed(1)}
                   </p>
-                  <p className="text-gray-300">{movie.vote_count} Votes</p>
+                  <p className="text-gray-300">
+                    {kConverter(movie.vote_count)} Votes
+                  </p>
                 </div>
               </div>
+              {selectedMovie === movie.id && (
+                <div className="absolute top-2 right-2 flex items-center justify-center bg-primary h-6 w-6 rounded">
+                  <CheckIcon className="w-4 h-4 text-white" strokeWidth={2.5} />
+                </div>
+              )}
+              <p className="font-medium truncate">{movie.Title}</p>
+              <p className="text-gray-400 text-sm">{movie.release_date}</p>
             </div>
           ))}
+        </div>
+      </div>
+      {/* Show Price Input */}
+      <div className="mt-8">
+        <label className="block text-sm font-medium mb-2">Show Price</label>
+        <div className="inline-flex items-center gap-2 border border-gray-600 px-3 py-2 rounded-md">
+          <p className="text-sm text-gray-400">{currency}</p>
+          <input
+            type="number"
+            className="outline-none"
+            min={0}
+            value={showPrice}
+            onChange={(e) => setShowPrice(e.target.value)}
+            placeholder="Enter Show Price"
+          />
         </div>
       </div>
     </>
