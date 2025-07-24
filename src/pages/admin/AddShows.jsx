@@ -17,6 +17,34 @@ const AddShows = () => {
     setNowPlayingMovies(dummyShowsData);
   };
 
+  const handleDateTimeAdd = () => {
+    if (!dateTimeInput) return;
+    const [date, time] = dateTimeInput.split("T");
+    if (!date || !time) return;
+
+    setDateTimeSelection((prev) => {
+      const times = prev[date] || [];
+      if (!times.inludes(time)) {
+        return { ...prev, [data]: [, , , times, time] };
+      }
+      return prev;
+    });
+  };
+
+  const handleRemoveTime = (date, time) => {
+    setDateTimeSelection((prev) => {
+      const filteredTimes = prev[data].filter((t) => t !== time);
+      if (filteredTimes.length === 0) {
+        const { [date]: _, ...rest } = prev;
+        return rest;
+      }
+      return {
+        ...prev,
+        [date]: filteredTimes,
+      };
+    });
+  };
+
   useEffect(() => {
     fetchNowPlayingMovies();
   }, []);
@@ -71,8 +99,29 @@ const AddShows = () => {
             min={0}
             value={showPrice}
             onChange={(e) => setShowPrice(e.target.value)}
-            placeholder="Enter Show Price"
+            placeholder="Enter Show Price "
           />
+        </div>
+      </div>
+
+      {/* Date & Time Selection */}
+      <div className="mt-6">
+        <label className="block text-sm font-medium mb-2">
+          Select Date and Time
+        </label>
+        <div className="inline-flex gap-5 border border-gray-600 p-1 pl-3 rounded-lg">
+          <input
+            type="datetime-local"
+            value={dateTimeInput}
+            onChange={(e) => setDateTimeInput(e.target.value)}
+            className="outline-none rounded-md"
+          />
+          <button
+            className="bg-primary/80 text-white px-3 py-2 text-sm rounded-lg hover:bg-primary cursor-pointer"
+            onClick={handleDateTimeAdd}
+          >
+            Add Time
+          </button>
         </div>
       </div>
     </>

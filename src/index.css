@@ -3,8 +3,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #F84565;
-  --color-primary-dull: #D63854;
+  --color-primary: #f84565;
+  --color-primary-dull: #d63854;
 }
 
 * {
@@ -12,12 +12,21 @@
   scrollbar-width: thin;
   scrollbar-color: #787777 #1e1e1e;
 }
- 
-body{
-    color: white;
-    background-color: #09090B;
+
+body {
+  color: white;
+  background-color: #09090b;
 }
 
-.no-scrollbar{
+.no-scrollbar {
   scrollbar-width: none;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+::webkit-calender-picker-indicator {
+  filter: invert(1);
 }
