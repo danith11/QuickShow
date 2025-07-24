@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { dummyShowsData } from "../../assets/assets";
 import Loading from "../../components/Loading";
 import Title from "../../components/admin/Title";
-import { CheckIcon, StarIcon } from "lucide-react";
+import { CheckIcon, DeleteIcon, StarIcon } from "lucide-react";
 import { kConverter } from "../../lib/kConverter";
 
 const AddShows = () => {
@@ -17,15 +17,30 @@ const AddShows = () => {
     setNowPlayingMovies(dummyShowsData);
   };
 
+  // const handleDateTimeAdd = () => {
+  //   if (!dateTimeInput) return;
+  //   const [date, time] = dateTimeInput.split("T");
+  //   if (!date || !time) return;
+
+  //   setDateTimeSelection((prev) => {
+  //     const times = prev[date] || [];
+  //     if (!times.includes(time)) {
+  //       return { ...prev, [date]: [ ...times, time] };
+  //     }
+  //     return prev;
+  //   });
+  // };
+
   const handleDateTimeAdd = () => {
-    if (!dateTimeInput) return;
+    if (!dateTimeInput || !dateTimeInput.includes("T")) return;
+
     const [date, time] = dateTimeInput.split("T");
-    if (!date || !time) return;
+    if (!date?.trim() || !time?.trim()) return;
 
     setDateTimeSelection((prev) => {
       const times = prev[date] || [];
-      if (!times.inludes(time)) {
-        return { ...prev, [data]: [, , , times, time] };
+      if (!times.includes(time)) {
+        return { ...prev, [date]: [...times, time] };
       }
       return prev;
     });
@@ -124,6 +139,38 @@ const AddShows = () => {
           </button>
         </div>
       </div>
+      {/* Display Selected Time */}
+      {Object.keys(dateTimeSelection).length > 0 && (
+        <div className="mt-6">
+          <h2 className="mb-2">Selected Date-Time</h2>
+          <ul className="space-y-3">
+            {Object.entries(dateTimeSelection).map(([date, time]) => (
+              <li key={date}>
+                <div className="font-medium">{date}</div>
+                <div className="flex flex-wrap gap-2 mt-1 text-sm">
+                  {times.map((time) => (
+                    <div
+                      key={time}
+                      className="border border-primary px-2 py-1 flex items-center rounded"
+                    >
+                      <span>{time}</span>
+                      <DeleteIcon
+                        className="ml-2 text-red-500 hover:text-red-700 cursor-pointer"
+                        onClick={() => handleRemoveTime(date, time)}
+                        width={15}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <button className="bg-primary text-white px-8 py-2 mt-6 rounded hover:bg-primary/90 transition-all cursor-pointer">
+        Add Show
+      </button>
     </>
   ) : (
     <Loading />
