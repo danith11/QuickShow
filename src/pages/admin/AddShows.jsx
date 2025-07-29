@@ -46,23 +46,43 @@ const AddShows = () => {
     });
   };
 
+  // const handleRemoveTime = (date, time) => {
+  //   setDateTimeSelection((prev) => {
+  //     const filteredTimes = prev[date].filter((t) => t !== time);
+  //     if (filteredTimes.length === 0) {
+  //       const { [date]: _, ...rest } = prev;
+  //       return rest;
+  //     }
+  //     return {
+  //       ...prev,
+  //       [date]: filteredTimes,
+  //     };
+  //   });
+  // };
+
   const handleRemoveTime = (date, time) => {
-    setDateTimeSelection((prev) => {
-      const filteredTimes = prev[data].filter((t) => t !== time);
-      if (filteredTimes.length === 0) {
-        const { [date]: _, ...rest } = prev;
-        return rest;
-      }
-      return {
-        ...prev,
-        [date]: filteredTimes,
-      };
-    });
-  };
+  setDateTimeSelection((prev) => {
+    const filteredTimes = prev[date].filter((t) => t !== time);
+    if (filteredTimes.length === 0) {
+      const { [date]: _, ...rest } = prev;
+      return rest;
+    }
+    return {
+      ...prev,
+      [date]: filteredTimes,
+    };
+  });
+};
+
 
   useEffect(() => {
     fetchNowPlayingMovies();
   }, []);
+
+  useEffect(() => {
+  console.log("DateTime Selection:", dateTimeSelection);
+}, [dateTimeSelection]);
+
 
   return nowPlayingMovies.length > 0 ? (
     <>
@@ -144,7 +164,7 @@ const AddShows = () => {
         <div className="mt-6">
           <h2 className="mb-2">Selected Date-Time</h2>
           <ul className="space-y-3">
-            {Object.entries(dateTimeSelection).map(([date, time]) => (
+            {Object.entries(dateTimeSelection).map(([date, times]) => (
               <li key={date}>
                 <div className="font-medium">{date}</div>
                 <div className="flex flex-wrap gap-2 mt-1 text-sm">
