@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { createContext } from "react";
 import axios from "axios";
 import { useAuth, useUser } from "@clerk/clerk-react";
@@ -36,6 +36,36 @@ export const AppProvider = ({ cildren }) => {
     }
   };
 
+  const fetchShows = async () => {
+    try {
+      const { data } = await axios.get("/api/show/all");
+      if (data.success) {
+        setShows(data.shows);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchFavoriteMovies = async()=>{
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
+  useEffect(() => {
+    fetchShows();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchIsAdmin();
+    }
+  }, [user]);
   const value = { axios };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
