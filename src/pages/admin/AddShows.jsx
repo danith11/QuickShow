@@ -4,8 +4,10 @@ import Loading from "../../components/Loading";
 import Title from "../../components/admin/Title";
 import { CheckIcon, DeleteIcon, StarIcon } from "lucide-react";
 import { kConverter } from "../../lib/kConverter";
+import { useAppContext } from "../../context/AppContect";
 
 const AddShows = () => {
+  const { axios, getToken, user, image_base_url } = useAppContext();
   const currency = import.meta.env.VITE_CURRENCY;
   const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -14,7 +16,16 @@ const AddShows = () => {
   const [showPrice, setShowPrice] = useState("");
 
   const fetchNowPlayingMovies = async () => {
-    setNowPlayingMovies(dummyShowsData);
+    try {
+      const { data } = await axios.get("/api/show/now-playing", {
+        headers: { AUthorization: `Bearer ${await getToken()}` },
+      });
+      if (data.success) {
+        setNowPlayingMovies(data.movies);
+      }
+    } catch (error) {
+      console.error("Error Fetching Movies:", error);
+    }
   };
 
   // const handleDateTimeAdd = () => {
@@ -61,28 +72,28 @@ const AddShows = () => {
   // };
 
   const handleRemoveTime = (date, time) => {
-  setDateTimeSelection((prev) => {
-    const filteredTimes = prev[date].filter((t) => t !== time);
-    if (filteredTimes.length === 0) {
-      const { [date]: _, ...rest } = prev;
-      return rest;
+    setDateTimeSelection((prev) => {
+      const filteredTimes = prev[date].filter((t) => t !== time);
+      if (filteredTimes.length === 0) {
+        const { [date]: _, ...rest } = prev;
+        return rest;
+      }
+      return {
+        ...prev,
+        [date]: filteredTimes,
+      };
+    });
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchNowPlayingMovies();
     }
-    return {
-      ...prev,
-      [date]: filteredTimes,
-    };
-  });
-};
-
+  }, [user]);
 
   useEffect(() => {
-    fetchNowPlayingMovies();
-  }, []);
-
-  useEffect(() => {
-  console.log("DateTime Selection:", dateTimeSelection);
-}, [dateTimeSelection]);
-
+    console.log("DateTime Selection:", dateTimeSelection);
+  }, [dateTimeSelection]);
 
   return nowPlayingMovies.length > 0 ? (
     <>
@@ -98,7 +109,7 @@ const AddShows = () => {
             >
               <div className="relative rounded-lg overflow-hidden">
                 <img
-                  src={movie.poster_path}
+                  src={image_base_url + movie.poster_path}
                   alt=""
                   className="w-full object-cover brightness-90"
                 />
@@ -117,7 +128,7 @@ const AddShows = () => {
                   <CheckIcon className="w-4 h-4 text-white" strokeWidth={2.5} />
                 </div>
               )}
-              <p className="font-medium truncate">{movie.Title}</p>
+              <p className="font-medium truncate">{movie.title}</p>
               <p className="text-gray-400 text-sm">{movie.release_date}</p>
             </div>
           ))}
