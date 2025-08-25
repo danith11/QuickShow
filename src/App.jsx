@@ -19,7 +19,7 @@ import { SignIn } from "@clerk/clerk-react";
 
 const App = () => {
   const isAdminRoute = useLocation().pathname.startsWith("/admin");
-  // const { user } = useAppContext();
+  const { user } = useAppContext();
   return (
     <>
       <Toaster />
@@ -31,7 +31,7 @@ const App = () => {
         <Route path="/movies/:id/:date" element={<SeatLayout />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/favorite" element={<Favorite />} />
-        {/* <Route
+        <Route
           path="/admin/*"
           element={
             user ? (
@@ -42,9 +42,7 @@ const App = () => {
               </div>
             )
           }
-        > */}
-          <Route path="/admin/*" element={<Layout/>}>
-          
+        >
           <Route index element={<Dashboard />} />
           <Route path="add-shows" element={<AddShows />} />
           <Route path="list-shows" element={<ListShows />} />
