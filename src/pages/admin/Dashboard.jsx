@@ -53,7 +53,7 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const { data } = axios.get("/api/admin/dashboard", {
+      const { data } = await axios.get("/api/admin/dashboard", {
         headers: { Authorization: `Bearer ${await getToken()}` },
       });
       if (data.success) {
