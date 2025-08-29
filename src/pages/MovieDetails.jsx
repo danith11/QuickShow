@@ -8,6 +8,7 @@ import DateSelect from "../components/DateSelect";
 import MovieCard from "../components/MovieCard";
 import Loading from "../components/Loading";
 import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const MovieDetails = () => {
   const {
@@ -121,7 +122,7 @@ const MovieDetails = () => {
           {show.movie.casts.slice(0, 12).map((cast, index) => (
             <div className="text-center items-center flex flex-col" key={index}>
               <img
-                src={cast.profile_path}
+                src={image_base_url+cast.profile_path}
                 alt=""
                 className="rounded-full h-20 md:h-20 aspect-square object-cover"
               />
