@@ -68,7 +68,7 @@ const SeatLayout = () => {
               } ${occupiedSeats.includes(seatId) && "opacity-50"}`}
             >
               {seatId}
-            </button>
+            </button>  
           );
         })}
       </div>
