@@ -41,8 +41,11 @@ const SeatLayout = () => {
     if (!selectedTime) {
       return toast("Please select time first");
     }
-    if (!selectedSeats.include(seatId) && selectedSeats.length > 4) {
+    if (!selectedSeats.includes(seatId) && selectedSeats.length > 4) {
       return toast("You can only select 5 seats");
+    }
+    if (occupiedSeats.includes(seatId)) {
+      return toast("This seat is already booked");
     }
     setSelectedSeats((prev) =>
       prev.includes(seatId)
@@ -62,7 +65,7 @@ const SeatLayout = () => {
               onClick={() => handleSeatClick(seatId)}
               className={`h-8 w-8 rounded border border-primary/60 cursor-pointer ${
                 selectedSeats.includes(seatId) && "bg-primary text-white "
-              }`}
+              } ${occupiedSeats.includes(seatId) && "opacity-50"}`}
             >
               {seatId}
             </button>
@@ -84,6 +87,37 @@ const SeatLayout = () => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const bookTickets = async () => {
+    try {
+      if (!user) {
+        return toast.error("Please Login to proceed");
+      }
+      if (!selectedTime || !selectedSeats.length) {
+        return toast.error("Please select a time and seats");
+      }
+
+      const { data } = await axios.post(
+        "/api/booking/create",
+        {
+          showId: selectedTime.showId,
+          selectedSeats,
+        },
+        {
+          headers: { Authorization: `Bearer ${await getToken()}` },
+        }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/my-bookings");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -140,7 +174,7 @@ const SeatLayout = () => {
           </div>
         </div>
         <button
-          onClick={() => navigate("/my-bookings")}
+          onClick={bookTickets}
           className="flex items-center gap-1 mt-20 px-10 py-3 text-sm bg-primary hover:bg-primary-dull transition 
            rounded-full font-medium cursor-pointer active:scale-95"
         >
