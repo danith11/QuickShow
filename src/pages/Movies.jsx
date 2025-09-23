@@ -5,6 +5,7 @@ import { useAppContext } from "../context/AppContext";
 
 const Movies = () => {
   const { shows } = useAppContext();
+  console.log("Shows from context:", shows);
   return shows.length > 0 ? (
     <div className="overflow-hidden relative my-40 mb-60 px-6 md:px-16 lg:px-40 xl:px-44">
       <BlurCircle top="150px" left="0" />
